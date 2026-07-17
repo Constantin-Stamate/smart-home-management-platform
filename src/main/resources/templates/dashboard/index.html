@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
+
+<body>
+<div class="app-container">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <div th:replace="~{fragments/layout :: topbar}"></div>
+        <!-- Content Area -->
+        <div class="content-area">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Welcome to your Smart Home Management System</p>
+            </div>
+            <!-- Stats Grid -->
+            <div class="grid-3" style="margin-bottom: 2rem;">
+                <div class="card" style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2.5rem; color: var(--primary);"><i class="fas fa-door-open"></i></div>
+                    <div>
+                        <p class="text-muted">Rooms</p>
+                        <h2 style="font-size: 1.875rem;" th:text="${view.roomCount()}">0</h2>
+                    </div>
+                </div>
+                <div class="card" style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2.5rem; color: var(--secondary);"><i class="fas fa-plug"></i></div>
+                    <div>
+                        <p class="text-muted">Active Devices</p>
+                        <h2 style="font-size: 1.875rem;"
+                            th:text="${view.activeDevices()} + ' / ' + ${view.deviceCount()}">0 / 0</h2>
+                    </div>
+                </div>
+                <div class="card" style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2.5rem; color: var(--warning);"><i class="fas fa-bolt"></i></div>
+                    <div>
+                        <p class="text-muted">Energy Consumption</p>
+                        <h2 style="font-size: 1.875rem;" th:text="${view.totalEnergy()} + ' kWh'">0 kWh</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="grid-2">
+                <!-- Energy Chart Section -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem;">Energy Usage (Week)</h3>
+                    <canvas id="energyChart" width="400" height="200"></canvas>
+                </div>
+                <!-- Recent Activity & Notifications -->
+                <div class="card" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div>
+                        <h3 style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            Recent Activity
+                            <i class="fas fa-history text-muted"></i>
+                        </h3>
+                        <div th:if="${#lists.isEmpty(view.recentHistory())}" class="text-muted">No recent activity.
+                        </div>
+                        <ul style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <li th:each="item : ${view.recentHistory()}"
+                                style="display: flex; gap: 0.75rem; align-items: flex-start; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);">
+                                <div style="color: var(--primary); margin-top: 2px;"><i class="fas fa-circle-dot"
+                                                                                        style="font-size: 0.5rem;"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;" th:text="${item.device.name}">Device Name</div>
+                                    <div class="text-muted" style="font-size: 0.875rem;" th:text="${item.message}">
+                                        Action performed
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                            Notifications
+                            <i class="fas fa-bell text-warning"></i>
+                        </h3>
+                        <div th:if="${#lists.isEmpty(view.notifications())}" class="text-muted">No new notifications.
+                        </div>
+                        <ul style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <li th:each="note : ${view.notifications()}"
+                                style="background-color: rgba(59, 130, 246, 0.1); padding: 0.75rem; border-radius: 6px; border-left: 3px solid var(--info);">
+                                <div style="font-weight: 600; margin-bottom: 0.25rem;" th:text="${note.title}">
+                                    Notification Title
+                                </div>
+                                <div style="font-size: 0.875rem;" th:text="${note.message}">Notification message goes
+                                    here...
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('energyChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'kWh Consumed',
+                        data: [12, 19, 15, 22, 18, 25, 20], // This would normally come from backend
+                        borderColor: '#4f46e5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: false}
+                    },
+                    scales: {
+                        y: {beginAtZero: true}
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+
+</html>

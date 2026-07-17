@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Profile')}"></head>
+
+<body>
+<div class="app-container">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <div class="main-content">
+        <div th:replace="~{fragments/layout :: topbar}"></div>
+        <div class="content-area">
+            <div class="page-header">
+                <h1 class="page-title">Profile Settings</h1>
+                <p class="page-subtitle">Manage your account details and preferences</p>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <i class="fas fa-user-circle text-primary"></i> Personal Information
+                    </h3>
+                    <form th:action="@{/profile}" th:object="${profileRequest}" method="post"
+                          style="display: flex; flex-direction: column; gap: 1rem;">
+                        <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> -->
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 500; font-size: 0.875rem;">Full Name</label>
+                            <input th:field="*{fullName}" required minlength="3"
+                                   style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-color); color: var(--text-main);">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 500; font-size: 0.875rem;">Email Address</label>
+                            <input th:value="${user.email}" disabled
+                                   style="padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; background: rgba(0,0,0,0.05); color: var(--text-muted); cursor: not-allowed;">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="font-weight: 500; font-size: 0.875rem;">Account Role</label>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span th:each="role : ${user.roles}" th:text="${role.name}"
+                                      style="background: var(--info); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: bold;">ROLE</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Save Changes</button>
+                    </form>
+                </div>
+                <div class="card" style="height: fit-content;">
+                    <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <i class="fas fa-paint-roller text-secondary"></i> Preferences
+                    </h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+                        <div>
+                            <h4 style="margin-bottom: 0.25rem;">Dark Mode</h4>
+                            <p class="text-muted" style="font-size: 0.875rem;">Toggle dark mode appearance</p>
+                        </div>
+                        <button class="btn" style="border: 1px solid var(--border-color); background: var(--bg-color);"
+                                onclick="document.getElementById('theme-toggle').click()">
+                            Toggle Theme
+                        </button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-top: 1px solid var(--border-color);">
+                        <div>
+                            <h4 style="margin-bottom: 0.25rem;">Notifications</h4>
+                            <p class="text-muted" style="font-size: 0.875rem;">Receive real-time alerts</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
