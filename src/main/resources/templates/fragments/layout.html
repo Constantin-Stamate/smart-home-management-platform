@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - Smart Home'">Smart Home</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <script th:src="@{/js/app.js}" defer></script>
+    <!-- Chart.js for dashboard -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+</head>
+
+<body>
+<div th:fragment="sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <i class="fas fa-home text-success"></i>
+        <span>SmartHome</span>
+    </div>
+    <ul class="sidebar-nav">
+        <li><a th:href="@{/dashboard}" class="nav-item"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+        <li><a th:href="@{/devices}" class="nav-item"><i class="fas fa-lightbulb"></i> Devices</a></li>
+        <li><a th:href="@{/rooms}" class="nav-item"><i class="fas fa-door-open"></i> Rooms</a></li>
+        <li><a th:href="@{/profile}" class="nav-item"><i class="fas fa-user"></i> Profile</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin}" class="nav-item"><i class="fas fa-cog"></i> Admin
+            Panel</a></li>
+    </ul>
+    <div style="padding: 1.5rem; margin-top: auto; border-top: 1px solid var(--border-color);">
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn"
+                    style="width:100%; justify-content: flex-start; color: var(--danger); background: none;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
+</div>
+<div th:fragment="topbar" class="topbar">
+    <button id="sidebar-toggle" class="btn"
+            style="display: none; background: none; color: var(--text-main); font-size: 1.25rem;">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div style="font-weight: 500;">
+        Welcome, <span sec:authentication="name" class="text-success">User</span>!
+    </div>
+    <div class="topbar-actions">
+        <button id="theme-toggle" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        <div class="user-avatar"
+             style="width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+            <i class="fas fa-user"></i>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Admin Panel')}"></head>
+
+<body>
+<div class="app-container">
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+    <div class="main-content">
+        <div th:replace="~{fragments/layout :: topbar}"></div>
+        <div class="content-area">
+            <div class="page-header">
+                <h1 class="page-title">Admin Panel</h1>
+                <p class="page-subtitle">System overview and user management</p>
+            </div>
+            <div class="grid-2">
+                <!-- Users List -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-users text-primary"></i> Registered Users
+                    </h3>
+                    <ul style="display: flex; flex-direction: column; gap: 1rem;">
+                        <li th:each="user : ${users}"
+                            style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--border-color); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--text-muted);">
+                                    <span th:text="${user.fullName.substring(0,1)}">U</span>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500;" th:text="${user.fullName}">User Name</div>
+                                    <div style="font-size: 0.875rem;" class="text-muted" th:text="${user.email}">
+                                        user@email.com
+                                    </div>
+                                </div>
+                            </div>
+                            <form th:action="@{/admin/users/{id}/toggle(id=${user.id})}" method="post">
+                                <button type="submit" class="btn"
+                                        th:classappend="${user.enabled ? 'text-danger' : 'text-success'}"
+                                        style="background: none; border: 1px solid var(--border-color);">
+                                    <i th:class="${user.enabled ? 'fas fa-ban' : 'fas fa-check'}"></i>
+                                    <span th:text="${user.enabled ? 'Disable' : 'Enable'}">Toggle</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Global Devices Overview -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-microchip text-secondary"></i> Global Devices
+                    </h3>
+                    <ul style="display: flex; flex-direction: column; gap: 1rem;">
+                        <li th:each="device : ${devices}"
+                            style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-color); border-radius: 6px;">
+                            <div>
+                                <div style="font-weight: 500;" th:text="${device.name}">Device Name</div>
+                                <div style="font-size: 0.75rem;" class="text-muted">Owner: <span
+                                        th:text="${device.room.owner.email}">user@email.com</span></div>
+                            </div>
+                            <span style="font-size: 0.75rem; font-weight: bold; padding: 0.25rem 0.5rem; border-radius: 4px; background: rgba(0,0,0,0.05);"
+                                  th:text="${device.status}">ON</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
