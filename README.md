@@ -1,6 +1,6 @@
 # Smart House Management Platform
 
-<img width="1901" height="905" alt="Demo Image" src="https://raw.githubusercontent.com/Constantin-Stamate/smart-home-management-platform/main/src/main/resources/static/images/demo.png" />
+<img alt="Demo Image" src="src/main/resources/static/images/demo.png" />
 
 ## Overview
 
